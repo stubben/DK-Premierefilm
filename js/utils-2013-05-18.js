@@ -28,6 +28,12 @@ $(document).ready(function() {
 	    });
 	});
 	*/
+	$.ajax({
+		url: "update_db.php",
+		data: {url: url},
+		type: 'post',
+		success: function(data) {}
+	});
 	$('.md_month').find("a").on("click",function(e){
 		e.preventDefault();
 		var link = $(this).attr('rel');

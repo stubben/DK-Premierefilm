@@ -24,8 +24,8 @@ $url = $_SERVER["SCRIPT_NAME"];
 $break = Explode('/', $url);
 $file = $break[count($break) - 1];
 $cachefile = 'cached-'.substr_replace($file ,"",-4).'-'.$_REQUEST['showYear'].'.html';
-//$cachetime = 86400;
-$cachetime = 1;
+$cachetime = 86400;
+//$cachetime = 1;
 
 // Serve from the cache if it is younger than $cachetime
 if (file_exists($cachefile) && time() - $cachetime < filemtime($cachefile)) {
@@ -85,7 +85,6 @@ function _get_last_change($url) {
 	$r = curl_exec($curl);
 	if ($r === false) {
 		die (curl_error($curl));
-
 	}
 	$ts = curl_getinfo($curl, CURLINFO_FILETIME);
 	if ($ts != -1) { //otherwise unknown
@@ -110,9 +109,24 @@ function _get_data($url) {
 }
 $url = "http://www.kino.dk/upload/movie_premiere.html";
 
-$last_change = _get_last_change($url);
+if ($handle = opendir('txt/')) {
+    while (false !== ($f = readdir($handle))) {
+        if ($f != "." && $f != ".." && $f != "index.php") {
+            $txt_db_file[str_replace('.txt', '', $f)] = $f;
+        }
+    }
+    closedir($handle);
+}
+if ($txt_db_file) krsort($txt_db_file, SORT_NUMERIC);
+if (!is_numeric(end($txt_db_file))) {
+	array_pop($txt_db_file);
+}
+$newest_txt_db_file = key($txt_db_file);
 
-if (file_exists('txt/'.$last_change.'.txt')) {
+//$last_change = _get_last_change($url);
+$last_change = $newest_txt_db_file;
+
+if (file_exists('txt/'.$newest_txt_db_file.'.txt')) {
 	$m = file_get_contents('txt/'.$last_change.'.txt');
 	$movies_year_month_day 	= _decode_string_array($m);
 	$all_years 				= array_keys($movies_year_month_day);
@@ -360,6 +374,8 @@ function hideAddressBar() {
 }
 window.addEventListener("load", function(){ if(!window.pageYOffset){ hideAddressBar(); } } );
 window.addEventListener("orientationchange", hideAddressBar );
+
+var url = "<?php print $url; ?>";
 </script>
 </body>
 </html>
