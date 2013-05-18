@@ -197,7 +197,7 @@ if (file_exists('txt/'.$last_change.'.txt')) {
 	<link href="css/w-2013-05-01m.css" rel="stylesheet">
 	<link rel="apple-touch-icon" href="img/premierefilm.png"/>
 	<link rel="apple-touch-icon-precomposed" href="img/premierefilm.png"/>
-<body>
+<body onload="onload()">
 <div class="top">
 	<div class="row">
 		<div class="cell s1of4 md_theme_c1 md_h2"></div>
@@ -283,58 +283,72 @@ if (file_exists('txt/'.$last_change.'.txt')) {
 <footer>
 Maskinstormer.dk
 </footer>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script>
-$(document).ready(function() {
-	$('.imdb').click(function(){
-		var title = $(this).find('div').attr("title");
-		$('.imdb_title').html(title);
-		$('.imdb_poster').find('img[class*=imdb_id], .no_image').remove();
-	 	$.ajax({
-			//url: "http://www.imdbapi.com/?t=" + titles[i],
-			url: "http://www.imdbapi.com/?t="+title,
-			dataType: 'jsonp',
-			success: function(data) {
-				if (data.Poster) {
-					$('.imdb_poster').append('<img class="imdb_id_'+data.imdbID+'" src="'+data.Poster+'" width="50px">');
-				} else {
-					$('.imdb_poster').append('<div class="no_image">No image</div>');
-				}
-			},
-		    error: function(data) {
-		        alert('I\'m sorry Dave, I can\'t do that.');
-		    },
-		    complete: function(xhr, data) {
-		        if (xhr.status == 0) {
-		            //alert('fail');
-		        } else {
-		            //alert('complete');
-		        }
-		    }
-	    });
-	});
-	$('.md_month').find("a").on("click",function(e){
-		e.preventDefault();
-		var link = $(this).attr('rel');
-		var link_h1 = $('#'+link);
-		$('html,body').animate({scrollTop: link_h1.offset().top},400);
-	});
-	$('.js_go_to_top').click(function(){
-		$('html,body').animate({scrollTop: 0},400);
-	});
-});
 
+<script type="text/javascript">
+(function(){
+	function e(e){
+		if(typeof window.onload!="function"){
+			window.onload=e
+		}else{
+			var t=window.onload;
+			window.onload=function(){
+				t();e()
+			}
+		}
+	}
+	function t(e,t){
+		var n=document.createElement("script");
+		n.src=e;
+		var r=document.getElementsByTagName("head")[0],i=false;
+		n.onload=n.onreadystatechange=function(){
+			if(!i&&(!this.readyState||this.readyState=="loaded"||this.readyState=="complete")){
+				i=true;
+				t();
+				n.onload=n.onreadystatechange=null;
+				r.removeChild(n)
+			}
+		};
+		r.appendChild(n)
+	}
+	function n(e,n){
+		function r(){
+			i++;
+			if(i==e.length)n()
+		}
+		var i=0;
+		for(var s=0;s<e.length;s++){
+			t(e[s],r)
+		}
+	}
+	var r=window.DeferredLoader={};
+	r.getScript=t;
+	r.getScripts=n;
+	r.deferred=e
+})()
+
+var urls = {
+	jquery: "//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js", 
+	dependent: ["js/utils-2013-05-18.js"]
+};
+DeferredLoader.deferred(function () {
+	DeferredLoader.getScript(urls.jquery, function () {
+		DeferredLoader.getScripts(urls.dependent, function () {});
+	})
+});
+function deferredLoadSafe(){};
+
+function onload() {
+	window.setTimeout(afterload, 1);
+}
+function afterload() {
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+}
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-111843-19']);
 _gaq.push(['_setDomainName', 'maskinstormer.dk']);
 _gaq.push(['_trackPageview']);
-
-(function() {
-var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
-
 
 function hideAddressBar() {
   if(!window.location.hash) {
