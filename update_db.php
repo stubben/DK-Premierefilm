@@ -105,9 +105,6 @@ if (!file_exists('txt/'.$last_change.'.txt')) {
 	}
 
 	$movies_year_month_day 			= array_reverse($movies_year_month_day,true); // newest first, preserve keys
-	$all_years 						= array_keys($movies_year_month_day);
-	$first_year 					= end($all_years);
-	$last_year 						= reset($all_years);
 	$movies_ser						= $last_change.'.txt';
 	$fh 							= fopen('txt/'.$movies_ser, 'w') or die("can't open file");
 	$movies_ser_data				= _encode_string_array($movies_year_month_day);
