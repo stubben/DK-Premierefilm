@@ -36,11 +36,25 @@ $(document).ready(function() {
 	});
 	$('.md_month').find("a").on("click",function(e){
 		e.preventDefault();
+		var month = $(this).attr('rel');
+		$('.month_selected').empty();
+		$.ajax({
+			type: "GET",
+			url: 'get_month.php',
+			data: {y: year, m: month, lc: last_change},
+			success: function(data) {
+				$('.month_selected').html(data);
+			}
+		});		
+		/**
 		var link = $(this).attr('rel');
 		var link_h1 = $('#'+link);
 		$('html,body').animate({scrollTop: link_h1.offset().top},400);
+		*/
 	});
+	/**
 	$('.js_go_to_top').click(function(){
 		$('html,body').animate({scrollTop: 0},400);
 	});
+	*/
 });

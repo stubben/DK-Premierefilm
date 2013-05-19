@@ -24,8 +24,8 @@ $url = $_SERVER["SCRIPT_NAME"];
 $break = Explode('/', $url);
 $file = $break[count($break) - 1];
 $cachefile = 'cached-'.substr_replace($file ,"",-4).'-'.$_REQUEST['showYear'].'.html';
-$cachetime = 86400;
-//$cachetime = 1;
+//$cachetime = 86400;
+$cachetime = 1;
 
 // Serve from the cache if it is younger than $cachetime
 if (file_exists($cachefile) && time() - $cachetime < filemtime($cachefile)) {
@@ -267,32 +267,38 @@ if (file_exists('txt/'.$newest_txt_db_file.'.txt')) {
 	}
 	?>
 	</article>
+	<section class="month_selected">
 		<?php
 		if (!empty($movies_year_month_day[$_REQUEST['showYear']])) {
 			foreach ($movies_year_month_day[$_REQUEST['showYear']] as $month => $days) {
-				print "<div class=\"row\">\n";
-				print '<div class="cell h1_month">';
-				print '<h1 id="'._get_month_name($month).'">'._get_month_name($month)."</h1>\n";
-				print '</div>
-							<div class="cell">
-								<div class="pls ptl md_cur_t1">
-									<div class="md_arr_t2 md_arr_t2 js_go_to_top md_bxsh_t1">
-										<div class="pat">Top</div>
+				if ($month == date("m")) {
+					print "<div class=\"row\">\n";
+					print '<div class="cell h1_month">';
+					print '<h1 id="'._get_month_name($month).'">'._get_month_name($month)."</h1>\n";
+					print '</div>';
+					/*
+								<div class="cell">
+									<div class="pls ptl md_cur_t1">
+										<div class="md_arr_t2 md_arr_t2 js_go_to_top md_bxsh_t1">
+											<div class="pat">Top</div>
+										</div>
 									</div>
 								</div>
-							</div>
-						</div>';
-				foreach ($days as $day => $titles) {
-					print '<h2>'.$day.'</h2>';
-					print '<ul>';
-					foreach ($titles as $k => $title) {
-						print '<li class="imdb"><a title="'.$title.'" href="http://www.imdb.com/find?q='.$title.'&s=all">'.$title."</a></li>\n";
+					*/
+					print '</div>';
+					foreach ($days as $day => $titles) {
+						print '<h2>'.$day.'</h2>';
+						print '<ul>';
+						foreach ($titles as $k => $title) {
+							print '<li class="imdb"><a title="'.$title.'" href="http://www.imdb.com/find?q='.$title.'&s=all">'.$title."</a></li>\n";
+						}
+						print '</ul>';
 					}
-					print '</ul>';
 				}
 			}
 		}
 		?>
+	</section>
 </div>
 <footer>
 Maskinstormer.dk
@@ -376,6 +382,8 @@ window.addEventListener("load", function(){ if(!window.pageYOffset){ hideAddress
 window.addEventListener("orientationchange", hideAddressBar );
 
 var url = "<?php print $url; ?>";
+var year = <?php print $_REQUEST['showYear']; ?>;
+var last_change = <?php print $last_change; ?>;
 </script>
 </body>
 </html>
