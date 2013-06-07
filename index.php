@@ -25,7 +25,7 @@ $break = Explode('/', $url);
 $file = $break[count($break) - 1];
 $cachefile = 'cached-'.substr_replace($file ,"",-4).'-'.$_REQUEST['showYear'].'.html';
 //$cachetime = 86400;
-$cachetime = 1;
+$cachetime = -1;
 
 // Serve from the cache if it is younger than $cachetime
 if (file_exists($cachefile) && time() - $cachetime < filemtime($cachefile)) {
@@ -248,6 +248,7 @@ if (file_exists('txt/'.$newest_txt_db_file.'.txt')) {
 <div class="imdb_poster" style="height:75px"></div>
 */ ?>
 <div class="wrap">
+	<div id="fetching-data" class="md_blkn"></div>
 	<article class="row">
 	<?php
 	if (!empty($movies_year_month_day[$_REQUEST['showYear']])) {
@@ -276,7 +277,7 @@ if (file_exists('txt/'.$newest_txt_db_file.'.txt')) {
 					print '<div class="cell h1_month">';
 					print '<h1 id="'._get_month_name($month).'">'._get_month_name($month)."</h1>\n";
 					print '</div>';
-					/*
+					print '
 								<div class="cell">
 									<div class="pls ptl md_cur_t1">
 										<div class="md_arr_t2 md_arr_t2 js_go_to_top md_bxsh_t1">
@@ -284,7 +285,7 @@ if (file_exists('txt/'.$newest_txt_db_file.'.txt')) {
 										</div>
 									</div>
 								</div>
-					*/
+					';
 					print '</div>';
 					foreach ($days as $day => $titles) {
 						print '<h2>'.$day.'</h2>';
@@ -348,11 +349,14 @@ Maskinstormer.dk
 
 var urls = {
 	jquery: "//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js", 
-	dependent: ["js/utils-2013-05-18.js"]
+	dependent: ["js/utils-2013-06-07.js", "js/spin.min.js"],
+	dependentOfDependent: ["js/spinner-conf.js"]
 };
 DeferredLoader.deferred(function () {
 	DeferredLoader.getScript(urls.jquery, function () {
-		DeferredLoader.getScripts(urls.dependent, function () {});
+		DeferredLoader.getScripts(urls.dependent, function () {
+			DeferredLoader.getScripts(urls.dependentOfDependent, function () {});
+		});
 	})
 });
 function deferredLoadSafe(){};
