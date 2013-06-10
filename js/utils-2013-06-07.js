@@ -6,13 +6,14 @@ $(document).ready(function() {
 		success: function(data) {}
 	});
 	$('.md_month').find("a").on("click",function(e){
+		$('html,body').animate({scrollTop: 0},400);
 		$('#fetching-data').css({'position': 'relative', 'left': '50%', 'top': '100px'}).show();
 		e.preventDefault();
 		var month = $(this).attr('rel');
 		$('.month_selected').empty();
 		var request = $.ajax({
 			type: "GET",
-			timeout: 1000,
+			timeout: 5000,
 			url: 'get_month.php',
 			data: {y: year, m: month, lc: last_change},
 			success: function(data) {

@@ -44,7 +44,7 @@ if (file_exists('txt/'.$_GET['lc'].'.txt')) {
 				print '<div class="cell h1_month">';
 				print '<h1 id="'.$_GET['m'].'">'.$_GET['m']."</h1>\n";
 				print '</div>';
-				/**
+				print '
 							<div class="cell">
 								<div class="pls ptl md_cur_t1">
 									<div class="md_arr_t2 md_arr_t2 js_go_to_top md_bxsh_t1">
@@ -52,7 +52,7 @@ if (file_exists('txt/'.$_GET['lc'].'.txt')) {
 									</div>
 								</div>
 							</div>
-				*/
+				';
 				print '</div>';
 				foreach ($days as $day => $titles) {
 					print '<h2>'.$day.'</h2>';
@@ -67,3 +67,8 @@ if (file_exists('txt/'.$_GET['lc'].'.txt')) {
 	}
 }
 ?>
+<script>
+$('.js_go_to_top').on("click",function(){
+	$('html,body').animate({scrollTop: 0},400);
+});
+</script>
